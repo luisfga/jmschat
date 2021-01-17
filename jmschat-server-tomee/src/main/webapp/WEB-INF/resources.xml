@@ -1,0 +1,63 @@
+<!--
+    Resources para o TomEE. Podem ser colocados também em <tommee_dir>/conf/tomee.xml,
+    mas lá a raiz é <tomee> mesmo não precisa da raiz que aqui e <resources>. Só vai a
+    tag <Resource>
+-->
+<resources>
+    
+    <!-- Datasource para o TomEE -->
+    <Resource id="applicationDS" type="DataSource">
+        JdbcDriver          org.hsqldb.jdbcDriver
+        JdbcUrl             jdbc:hsqldb:file:data/jmschat-server-db
+        UserName            sa
+        Password            
+        JtaManaged          true
+        DefaultAutoCommit   true
+    </Resource>
+    
+    <!--
+        Abaixo um template de javax.mail.Session preconfigurado.
+        Aqui são usadas variáveis de ambiente, mas pode-se colocar os 
+        valores diretamente, caso o código não fique aberto na internet. 
+    -->
+    <Resource id="applicationMailSession" type="javax.mail.Session">
+        mail.transport.protocol = smtp
+        mail.smtp.auth = true
+        mail.smtp.starttls.enable = true
+        mail.debug = true <!-- setar 'false' pra produção -->
+        
+        <!-- variáveis de ambiente necessárias no sistema -->
+        mail.smtp.host = ${APP_MAIL_SESSION_HOST}
+        mail.smtp.ssl.trust = ${APP_MAIL_SESSION_HOST}
+        mail.smtp.port = ${APP_MAIL_SESSION_PORT}
+        mail.smtp.user = ${APP_MAIL_SESSION_USERNAME}
+        password = ${APP_MAIL_SESSION_PASSWORD}
+    </Resource>
+    
+    <!-- Se a webapp do web console (activemq-web-console-5.16.0.war, por exemplo) estiver no servidor,
+    não precisar iniciar o broker que já será iniciada pelo web console. Se iniciar denovo vai aparecer
+    nos logs 'java.net.BindException: Address already in use: NET_Bind', porém estará funcionando normal.
+    Nesse caso, utilizar a primeira entrada. Se não tiver o web-console no servidor, usar a segunda.
+    -->
+<!--    <Resource id="MyJmsResourceAdapter" type="ActiveMQResourceAdapter">
+        # Do not start the embedded ActiveMQ broker
+        BrokerXmlConfig  =
+        ServerUrl = tcp://localhost:61616
+    </Resource>-->
+    <Resource id="MyJmsResourceAdapter" type="ActiveMQResourceAdapter">
+        BrokerXmlConfig =  broker:(tcp://localhost:61616)
+        ServerUrl       =  tcp://localhost:61616
+    </Resource>
+
+    <Resource id="MyJmsConnectionFactory" type="javax.jms.ConnectionFactory">
+        ResourceAdapter = MyJmsResourceAdapter
+    </Resource>
+
+    <Container id="MyJmsMdbContainer" ctype="MESSAGE">
+        ResourceAdapter = MyJmsResourceAdapter
+    </Container>
+
+    <Resource id="FooQueue" type="javax.jms.Queue"/>
+    <Resource id="BarTopic" type="javax.jms.Topic"/>
+    
+</resources>
