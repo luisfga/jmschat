@@ -1,0 +1,2 @@
+#1 the user has a UUID, generated when the app is first ran.
+    *OBS: for development it can use a argument to set the user id, to permit running 2 application on same machine, which will not occur with end-users.

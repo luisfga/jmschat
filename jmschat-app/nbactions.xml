@@ -10,4 +10,26 @@
             <goal>javafx:run</goal>
         </goals>
     </action>
+    <action>
+            <actionName>CUSTOM-clean javafx:run</actionName>
+            <displayName>clean javafx:run</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>javafx:run</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>dev</activatedProfile>
+            </activatedProfiles>
+        </action>
+    <action>
+            <actionName>CUSTOM-clean javafx:run -P alt (ALT USER)</actionName>
+            <displayName>clean javafx:run -P alt (ALT USER)</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>javafx:run</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>alt</activatedProfile>
+            </activatedProfiles>
+        </action>
 </actions>

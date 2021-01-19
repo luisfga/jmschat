@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -9,29 +9,111 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <javafx.version>15.0.1</javafx.version>
+        <activemq.version>5.16.0</activemq.version>
+        <javafx.plugin.version>0.0.5</javafx.plugin.version>
+        <hibernate.version>5.4.27.Final</hibernate.version>
+        <hsqldb.version>2.5.1</hsqldb.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <logback.classic.version>1.2.3</logback.classic.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
     <dependencies>
+        <!--JAVA FX-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>15.0.1</version>
+            <version>${javafx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>15.0.1</version>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!--ACTIVEMQ AND JMS-->
+        <!-- Attention to the geronimo spec package name issue -->        
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>${activemq.version}</version>
+            <!-- the compiler was not accepting 'requires geronimo.jms.1.1.spec;' on module-info.java to use jms interfaces, and was complaing to have 
+            also jms-api saying "module app reads package javax.jms from both geronimo.jms.1.1.spec and javax.jms.api". 
+            So the solution was exclude this geronimo lib and add javax.jms:jms-api dependency below and use it alone.
+            *The same aplies to javax.management specs
+       
+            It seems that geronimo package naming does not follow the Java9+ modules specifications, being only partially compatible.
+            I'm not sure of it till the date this pom was made. TODO: clarify this. -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jms_1.1_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-j2ee-management_1.1_spec</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>javax.jms</groupId>
+            <artifactId>jms-api</artifactId>
+            <version>1.1-rev-1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.management.j2ee</groupId>
+            <artifactId>management-api</artifactId>
+            <version>1.1-rev-1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.transaction</groupId>
+                    <artifactId>transaction-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <!--JPA-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.5</version>
+        </dependency>
+
+        
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${hsqldb.version}</version>
+        </dependency>
+        
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.classic.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-all</artifactId>
-            <version>5.16.0</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -41,31 +123,80 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${maven.compiler.version}</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>
                     <release>11</release>
                 </configuration>
             </plugin>
-            
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.5</version>
-                <configuration>
-                    
-                    <stripDebug>true</stripDebug>
-                    <compress>2</compress>
-                    <noHeaderFiles>true</noHeaderFiles>
-                    <noManPages>true</noManPages>
-                    <launcher>jmschat-launcher</launcher>
-                    <jlinkImageName>jmschat</jlinkImageName>
-                    <jlinkZipName>jmschat-zip</jlinkZipName>
-                    
-                    <mainClass>app/br.com.luisfga.jmschat.App</mainClass>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
+        
+    <profiles>
+        <!-- 
+            1. In addition to the 'dev' profile, we have 'alt'. It's the same of dev, but passing a command line arg to javafx plugin.
+            This is intended to inform the application to create a second user data base, the Alternative one, and permit running 2 apps at same time.
+            
+            2. The 'prod' profile has more configs, for instance, launcher generation, etc. 
+        -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openjfx</groupId>
+                        <artifactId>javafx-maven-plugin</artifactId>
+                        <version>${javafx.plugin.version}</version>
+                        <configuration>
+                            <mainClass>app/br.com.luisfga.jmschat.App</mainClass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>alt</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openjfx</groupId>
+                        <artifactId>javafx-maven-plugin</artifactId>
+                        <version>${javafx.plugin.version}</version>
+                        <configuration>
+                            <commandlineArgs>alt</commandlineArgs>
+                            <mainClass>app/br.com.luisfga.jmschat.App</mainClass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openjfx</groupId>
+                        <artifactId>javafx-maven-plugin</artifactId>
+                        <version>${javafx.plugin.version}</version>
+                        <configuration>
+                            <stripDebug>true</stripDebug>
+                            <compress>2</compress>
+                            <noHeaderFiles>true</noHeaderFiles>
+                            <noManPages>true</noManPages>
+                            <launcher>jmschat-launcher</launcher>
+                            <jlinkImageName>jmschat</jlinkImageName>
+                            <jlinkZipName>jmschat-zip</jlinkZipName>
+                            <mainClass>app/br.com.luisfga.jmschat.App</mainClass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

@@ -7,13 +7,23 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Properties;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
 
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
+    
     private static Scene scene;
+    
+    private static EntityManager em;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -31,7 +41,37 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
+    public static EntityManager getEntityManager(){
+        return em;
+    }
+    
     public static void main(String[] args) {
+        
+        logger.debug("Initializing JPA");
+        
+        Properties jpaUnitProperties = new Properties();
+
+        jpaUnitProperties.put("javax.persistence.jdbc.driver", "org.hsqldb.jdbcDriver");
+        jpaUnitProperties.put("javax.persistence.jdbc.url", "jdbc:hsqldb:file:data/jmschat-app-db");
+        jpaUnitProperties.put("javax.persistence.jdbc.user", "sa");
+        jpaUnitProperties.put("javax.persistence.jdbc.password", "");
+        jpaUnitProperties.put("connection.provider_class", "org.hibernate.connection.C3P0ConnectionProvider");
+        
+        
+        //if its not empty, create a database with this suffix. This permits runing 2+ apps at same time. Mainly to develpment porpoise.
+        //In 'production' its not needed, a priori. But can be useful to implement mult-user capabilities on same device.
+        if (args.length != 0) {
+            jpaUnitProperties.replace("javax.persistence.jdbc.url", "jdbc:hsqldb:file:data/jmschat-app-db-"+args[0]);
+        }
+
+        //Load entityManager
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("applicationJpaUnit", jpaUnitProperties);
+        em = emf.createEntityManager();
+        
+        logger.debug("JPA ready!");
+        
+        //TODO: Check user data
+        
         launch();
     }
 
