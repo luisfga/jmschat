@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
         <action>
-            <actionName>CUSTOM-tomee RUN</actionName>
-            <displayName>tomee RUN</displayName>
+            <actionName>run</actionName>
+            <packagings>
+                <packaging>war</packaging>
+                <packaging>ear</packaging>
+                <packaging>ejb</packaging>
+            </packagings>
             <goals>
                 <goal>clean</goal>
                 <goal>install</goal>
@@ -10,12 +14,8 @@
             </goals>
         </action>
         <action>
-            <actionName>run</actionName>
-            <packagings>
-                <packaging>war</packaging>
-                <packaging>ear</packaging>
-                <packaging>ejb</packaging>
-            </packagings>
+            <actionName>CUSTOM-clean install tomee:run</actionName>
+            <displayName>clean install tomee:run</displayName>
             <goals>
                 <goal>clean</goal>
                 <goal>install</goal>
