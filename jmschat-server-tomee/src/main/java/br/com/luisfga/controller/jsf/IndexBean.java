@@ -1,6 +1,8 @@
 package br.com.luisfga.controller.jsf;
 
+import br.com.luisfga.config.Property;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -11,7 +13,9 @@ import javax.inject.Named;
 @RequestScoped
 public class IndexBean {
     
-    private String message = "hi";
+    @Inject 
+    @Property("index.message")
+    private String message;
 
     public String getMessage() {
         return message;

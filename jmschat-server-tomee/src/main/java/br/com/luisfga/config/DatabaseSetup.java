@@ -1,4 +1,4 @@
-package br.com.luisfga.domain.config;
+package br.com.luisfga.config;
 
 import br.com.luisfga.domain.entities.AppRole;
 import java.util.List;
@@ -46,7 +46,7 @@ public class DatabaseSetup implements ServletContextListener {
             EntityManager em = emf.createEntityManager();
 
             Query findBasicRole = em.createNamedQuery("AppRole.findStandardRoles");
-            List<AppRole> roles = findBasicRole.getResultList();
+            List roles = findBasicRole.getResultList();
 
             if(!roles.isEmpty()){
                 logger.info("Required data is OK!");

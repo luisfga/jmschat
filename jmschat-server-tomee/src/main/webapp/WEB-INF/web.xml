@@ -4,28 +4,15 @@
    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
    version="4.0">
     
-    <display-name>Tomee Embedded</display-name>
+    <display-name>Tomee Standalone</display-name>
     
     <welcome-file-list>
         <welcome-file>/index.xhtml</welcome-file>
     </welcome-file-list>
     
-<!--    <error-page>
+    <error-page>
         <location>/error.xhtml</location>
-    </error-page>-->
-    
-    <env-entry>
-        <description>Hostname a ser usado na construção de links para a aplicação</description>
-        <env-entry-name>appBaseHostName</env-entry-name>
-        <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>http://localhost:8080</env-entry-value>
-    </env-entry>
-    
-    <resource-ref>
-         <res-ref-name>applicationDS</res-ref-name>
-         <res-type>javax.sql.DataSource</res-type>
-         <res-auth>Container</res-auth>
-    </resource-ref>
+    </error-page>
     
     <!-- JSF INSTALATION -->
     <servlet>
