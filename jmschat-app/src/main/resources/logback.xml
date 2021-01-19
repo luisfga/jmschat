@@ -11,7 +11,7 @@
 
     <appender name="AppConsole" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <Pattern>%d{HH:mm:ss} %highlight([%-5level]) %t %boldBlue(%class{0}): %green(%msg%n%throwable)</Pattern>
+            <Pattern>%d{HH:mm:ss} %highlight([%-5level]) %t %boldBlue([%class{0}]): %green(%msg%n%throwable)</Pattern>
         </encoder>
     </appender>
 
