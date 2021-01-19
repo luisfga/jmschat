@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-tomee RUN</actionName>
+            <displayName>tomee RUN</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>tomee:run</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>run</actionName>
+            <packagings>
+                <packaging>war</packaging>
+                <packaging>ear</packaging>
+                <packaging>ejb</packaging>
+            </packagings>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>tomee:run</goal>
+            </goals>
+        </action>
+    </actions>
